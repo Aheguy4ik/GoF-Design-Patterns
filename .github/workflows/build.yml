@@ -21,11 +21,11 @@ jobs:
 
       - name: Configure and build
         run: |
-          cmake -S Structural/Adapter -B build
-          cmake --build build
+          cmake -S Structural/Adapter -B Structural/Adapter/build
+          cmake --build Structural/Adapter/build
 
       - name: Run tests
-        run: ./build/tests
+        run: Structural/Adapter/tests
 
       - name: Package into .deb
         run: |
