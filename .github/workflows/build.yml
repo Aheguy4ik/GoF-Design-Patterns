@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  pull_request:
 
 jobs:
   build:
@@ -11,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Install dependencies
         run: |
@@ -20,10 +21,8 @@ jobs:
 
       - name: Configure and build
         run: |
-          mkdir -p build
-          cd build
-          cmake ..
-          make
+          cmake -S . -B build
+          cmake --build build
 
       - name: Run tests
         run: ./build/tests
@@ -38,30 +37,29 @@ jobs:
           echo "Architecture: amd64" >> build/deb/DEBIAN/control
           echo "Maintainer: Матвей" >> build/deb/DEBIAN/control
           echo "Description: Adapter design pattern implementation" >> build/deb/DEBIAN/control
-          dpkg-deb --build build/deb build/adapter.deb
+          dpkg-deb --build build/deb adapter.deb
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: adapter-package
-          path: build/adapter.deb
+          path: adapter.deb
 
   release:
     needs: build
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: adapter-package
           path: .
 
-      - name: Create GitHub Release
+      - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v1.0.${{ github.run_number }}
-          name: Release v1.0.${{ github.run_number }}
           files: adapter.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
