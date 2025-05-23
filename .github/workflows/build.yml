@@ -1,9 +1,12 @@
-name: Build and Release
+name: Build Only
 
 on:
   push:
+<<<<<<< HEAD
     tags:
       - 'v*'
+=======
+>>>>>>> f308b42 (add build)
     branches:
       - master
   pull_request:
@@ -13,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install dependencies
@@ -30,6 +33,7 @@ jobs:
 
       - name: Run tests
         run: ./build/tests
+<<<<<<< HEAD
 
       - name: Package into .deb
         run: |
@@ -67,3 +71,5 @@ jobs:
           files: adapter.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+=======
+>>>>>>> f308b42 (add build)
