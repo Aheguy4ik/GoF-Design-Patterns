@@ -34,13 +34,11 @@ jobs:
           mkdir -p build/deb/usr/local/bin
           cp build/adapter build/deb/usr/local/bin/adapter
           mkdir -p build/deb/DEBIAN
-          cat <<EOF > build/deb/DEBIAN/control
-Package: adapter
-Version: 1.0.0
-Architecture: amd64
-Maintainer: Матвей
-Description: Adapter design pattern implementation
-EOF
+          echo "Package: adapter" > build/deb/DEBIAN/control
+          echo "Version: 1.0.0" >> build/deb/DEBIAN/control
+          echo "Architecture: amd64" >> build/deb/DEBIAN/control
+          echo "Maintainer: Матвей" >> build/deb/DEBIAN/control
+          echo "Description: Adapter design pattern implementation" >> build/deb/DEBIAN/control
           dpkg-deb --build build/deb adapter.deb
 
       - name: Upload artifact
