@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/aheguy/GoF-Design-Patterns/Structural/Adapter/build/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

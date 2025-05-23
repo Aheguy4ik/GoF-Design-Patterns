@@ -1,2 +1,0 @@
-/usr/bin/ar qc libpet_adapter_dynamic.a CMakeFiles/pet_adapter_dynamic.dir/src/PetAdapterDynamic.cpp.o
-/usr/bin/ranlib libpet_adapter_dynamic.a

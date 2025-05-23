@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/adapter.dir/link.d CMakeFiles/adapter.dir/src/main.cpp.o -o adapter  libmonster.a libpet.a libpet_adapter_dynamic.a

@@ -1,8 +1,0 @@
-/home/aheguy/GoF-Design-Patterns/Structural/Adapter/build/CMakeFiles/monster.dir
-/home/aheguy/GoF-Design-Patterns/Structural/Adapter/build/CMakeFiles/pet.dir
-/home/aheguy/GoF-Design-Patterns/Structural/Adapter/build/CMakeFiles/pet_adapter_dynamic.dir
-/home/aheguy/GoF-Design-Patterns/Structural/Adapter/build/CMakeFiles/adapter.dir
-/home/aheguy/GoF-Design-Patterns/Structural/Adapter/build/CMakeFiles/tests.dir
-/home/aheguy/GoF-Design-Patterns/Structural/Adapter/build/CMakeFiles/test.dir
-/home/aheguy/GoF-Design-Patterns/Structural/Adapter/build/CMakeFiles/edit_cache.dir
-/home/aheguy/GoF-Design-Patterns/Structural/Adapter/build/CMakeFiles/rebuild_cache.dir

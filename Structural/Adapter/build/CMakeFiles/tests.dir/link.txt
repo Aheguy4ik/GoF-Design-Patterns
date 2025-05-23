@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/tests.dir/link.d CMakeFiles/tests.dir/tests/test_adapters.cpp.o -o tests  libmonster.a libpet.a libpet_adapter_dynamic.a /usr/lib/libgtest.so.1.17.0 -lpthread
