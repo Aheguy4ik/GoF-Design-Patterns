@@ -1,14 +1,39 @@
-name: Test Workflow
+name: Build and Upload Artifact
 
 on:
   push:
     branches:
       - master
+  pull_request:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - run: echo "Hello, world!"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y cmake g++ make libgtest-dev dpkg-dev
+
+      - name: Build project
+        run: |
+          mkdir -p build
+          cd build
+          cmake ..
+          make
+
+      - name: Run tests
+        run: ./build/tests
+
+      - name: Create dummy artifact file
+        run: echo "This is a test artifact" > artifact.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: test-artifact
+          path: artifact.txt
