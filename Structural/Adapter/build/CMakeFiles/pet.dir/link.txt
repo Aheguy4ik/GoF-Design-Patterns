@@ -1,0 +1,2 @@
+/usr/bin/ar qc libpet.a CMakeFiles/pet.dir/src/Pet.cpp.o
+/usr/bin/ranlib libpet.a

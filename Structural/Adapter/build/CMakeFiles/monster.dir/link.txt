@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmonster.a CMakeFiles/monster.dir/src/Monster.cpp.o
+/usr/bin/ranlib libmonster.a
