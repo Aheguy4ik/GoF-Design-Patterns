@@ -1,17 +1,16 @@
-name: Build and Upload Artifact
+name: Build, Package and Release on Push
 
 on:
   push:
     branches:
-      - master
-  pull_request:
+      - master  # Можно заменить на нужную ветку
 
 jobs:
-  build:
+  build_and_release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Install dependencies
@@ -19,21 +18,36 @@ jobs:
           sudo apt update
           sudo apt install -y cmake g++ make libgtest-dev dpkg-dev
 
-      - name: Build project
+      - name: Build project and tests
         run: |
           mkdir -p build
           cd build
           cmake ..
           make
+          ./tests
 
-      - name: Run tests
-        run: ./build/tests
+      - name: Package .deb
+        run: |
+          mkdir -p build/deb/usr/local/bin
+          cp build/adapter build/deb/usr/local/bin/adapter
+          mkdir -p build/deb/DEBIAN
+          echo "Package: adapter" > build/deb/DEBIAN/control
+          echo "Version: 1.0.0" >> build/deb/DEBIAN/control
+          echo "Architecture: amd64" >> build/deb/DEBIAN/control
+          echo "Maintainer: Матвей" >> build/deb/DEBIAN/control
+          echo "Description: Adapter design pattern implementation" >> build/deb/DEBIAN/control
+          dpkg-deb --build build/deb adapter.deb
 
-      - name: Create dummy artifact file
-        run: echo "This is a test artifact" > artifact.txt
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2.2.4
-        with:
-          name: test-artifact
-          path: artifact.txt
+      - name: Create or update GitHub Release and upload .deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RELEASE_NAME="branch-${GITHUB_REF#refs/heads/}"
+          # Проверяем, есть ли релиз с таким именем
+          if gh release view "$RELEASE_NAME"; then
+            echo "Release exists, uploading asset..."
+            gh release upload "$RELEASE_NAME" adapter.deb --clobber
+          else
+            echo "Creating new release..."
+            gh release create "$RELEASE_NAME" adapter.deb --title "$RELEASE_NAME" --notes "Release from branch ${GITHUB_REF#refs/heads/}"
+          fi
