@@ -22,7 +22,7 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake ../Structural/Adapter
+          cmake ..
           make
 
       - name: Run tests
@@ -38,22 +38,19 @@ jobs:
           echo "Architecture: amd64" >> build/deb/DEBIAN/control
           echo "Maintainer: Матвей" >> build/deb/DEBIAN/control
           echo "Description: Adapter design pattern implementation" >> build/deb/DEBIAN/control
-          dpkg-deb --build build/deb adapter.deb
+          dpkg-deb --build build/deb build/adapter.deb
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: adapter-package
-          path: adapter.deb
+          path: build/adapter.deb
 
   release:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:

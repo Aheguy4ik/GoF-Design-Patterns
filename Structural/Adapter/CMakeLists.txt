@@ -9,17 +9,24 @@ include_directories(include)
 add_library(monster STATIC src/Monster.cpp)
 add_library(pet STATIC src/Pet.cpp)
 add_library(pet_adapter_dynamic STATIC src/PetAdapterDynamic.cpp)
+add_library(pet_adapter_static STATIC src/PetAdapterStatic.cpp)
 
 add_executable(adapter src/main.cpp)
-target_link_libraries(adapter monster pet pet_adapter_dynamic)
+target_link_libraries(adapter monster pet pet_adapter_dynamic pet_adapter_static)
 
-# GoogleTest setup
+# GoogleTest
 enable_testing()
-
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 add_executable(tests tests/test_adapters.cpp)
-target_link_libraries(tests monster pet pet_adapter_dynamic ${GTEST_LIBRARIES} pthread)
+target_link_libraries(tests
+  monster
+  pet
+  pet_adapter_dynamic
+  pet_adapter_static
+  ${GTEST_LIBRARIES}
+  pthread
+)
 
 add_test(NAME AdapterTest COMMAND tests)
