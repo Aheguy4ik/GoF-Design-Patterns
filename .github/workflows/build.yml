@@ -67,3 +67,4 @@ jobs:
           files: adapter.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
