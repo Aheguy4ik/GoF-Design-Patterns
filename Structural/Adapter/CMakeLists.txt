@@ -22,7 +22,7 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 # Тесты
-add_executable(tests tests/test_adapters.cpp)
+add_executable(tests Structural/Adapter/tests/test_adapters.cpp)
 target_link_libraries(tests monster pet pet_adapter_dynamic ${GTEST_LIBRARIES} pthread)
 
 add_test(NAME AdapterTest COMMAND tests)
