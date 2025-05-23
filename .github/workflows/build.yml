@@ -1,12 +1,12 @@
-name: Build, Package and Release on Push
+name: Build and Release
 
 on:
   push:
     branches:
-      - master  # Можно заменить на нужную ветку
+      - master
 
 jobs:
-  build_and_release:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,15 +18,17 @@ jobs:
           sudo apt update
           sudo apt install -y cmake g++ make libgtest-dev dpkg-dev
 
-      - name: Build project and tests
+      - name: Configure and build
         run: |
           mkdir -p build
           cd build
-          cmake ..
+          cmake ../Structural/Adapter
           make
-          ./tests
 
-      - name: Package .deb
+      - name: Run tests
+        run: ./build/tests
+
+      - name: Package into .deb
         run: |
           mkdir -p build/deb/usr/local/bin
           cp build/adapter build/deb/usr/local/bin/adapter
@@ -38,16 +40,31 @@ jobs:
           echo "Description: Adapter design pattern implementation" >> build/deb/DEBIAN/control
           dpkg-deb --build build/deb adapter.deb
 
-      - name: Create or update GitHub Release and upload .deb
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: adapter-package
+          path: adapter.deb
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: adapter-package
+          path: .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Release v1.0.${{ github.run_number }}
+          files: adapter.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          RELEASE_NAME="branch-${GITHUB_REF#refs/heads/}"
-          # Проверяем, есть ли релиз с таким именем
-          if gh release view "$RELEASE_NAME"; then
-            echo "Release exists, uploading asset..."
-            gh release upload "$RELEASE_NAME" adapter.deb --clobber
-          else
-            echo "Creating new release..."
-            gh release create "$RELEASE_NAME" adapter.deb --title "$RELEASE_NAME" --notes "Release from branch ${GITHUB_REF#refs/heads/}"
-          fi
