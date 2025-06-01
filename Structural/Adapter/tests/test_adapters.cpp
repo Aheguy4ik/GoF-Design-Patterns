@@ -35,7 +35,7 @@ TEST(PetAdapterDynamicTest, BasicFunctionality) {
 TEST(PetAdapterStaticTest, BasicFunctionality) {
     PetAdapterStatic<Dragon> adapter;
     EXPECT_EQ(adapter.Name(), "Dragon");
-    EXPECT_GT(adapter.CutenessAbility(), 0);
+    EXPECT_GT(adapter.CutenessAbility(), 0);  // теперь точно > 0
     EXPECT_GT(adapter.BattleBonus(), 0);
 }
 
